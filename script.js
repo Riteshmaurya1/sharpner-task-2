@@ -66,28 +66,56 @@ function display(userData) {
       })
       .catch((error) => console.log(error));
   });
-  editBtn.addEventListener("click", function (event) {
+  //   editBtn.addEventListener("click", function (event) {
+  //     const el = event.target.parentElement;
+  //     const id = el.dataset.id;
+
+  //     // Here update the data from the user inputs.
+  //     document.getElementById("title").value = userData.title;
+  //     document.getElementById("password").value = userData.password;
+
+  //     const updateDetails = {
+  //       uodatedTitle: userData.title,
+  //       uodatedPassword: userData.password,
+  //     };
+  //     if (id) {
+  //       axios
+  //         .put(
+  //           `https://crudcrud.com/api/1f48ca11f48946928d71608ec32f1712/passwordkeeper/${id}`,
+  //           { updateDetails }
+  //         )
+  //         .then((res) => {
+  //           res.data;
+  //         })
+  //         .catch((error) => console.log(error));
+  //     }
+  //   });
+
+  editBtn.addEventListener("click", async function (event) {
     const el = event.target.parentElement;
     const id = el.dataset.id;
 
-    // Here update the data from the user inputs.
+    // Prefill inputs with current values shown in UI
     document.getElementById("title").value = userData.title;
     document.getElementById("password").value = userData.password;
 
-    const updateDetails = {
-      uodatedTitle: userData.title,
-      uodatedPassword: userData.password,
-    };
-    if (id) {
-      axios
-        .put(
-          `https://crudcrud.com/api/1f48ca11f48946928d71608ec32f1712/passwordkeeper/${id}`,
-          { updateDetails }
-        )
-        .then((res) => {
-          res.data;
-        })
-        .catch((error) => console.log(error));
+    // Read the updated values directly from inputs
+    const newTitle = document.getElementById("title").value;
+    const newPassword = document.getElementById("password").value;
+
+    if (!id) return;
+
+    try {
+      // PUT must include the replacement object as the 2nd arg
+      await axios.put(
+        `https://crudcrud.com/api/1f48ca11f48946928d71608ec32f1712/passwordkeeper/${id}`,
+        { title: newTitle, password: newPassword }
+      ); // axios.put(url, data) sends body; CrudCrud replaces the resource with these fields [web:179][web:143]
+
+      // Update the existing list item text
+      el.querySelector("span").textContent = `${newTitle} - ${newPassword}`;
+    } catch (error) {
+      console.log(error);
     }
   });
 }
