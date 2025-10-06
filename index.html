@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Password Keeper</title>
+    <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <h1 class="h1">Password Keeper</h1>
+        </div>
+        <div class="inputBox">
+            <form id="password-form" class="form">
+                <label for="title">Title</label>
+                <input type="text" class="input" id="title" name="title" placeholder="Enter Title" />
+
+                <br />
+
+                <label for="password">Password</label>
+                <input type="password" class="input" id="password" name="password" placeholder="Enter Password" />
+
+                <br />
+
+                <button type="submit">Add</button>
+            </form>
+        </div>
+        <div class="dataBox">
+            <ul id="list"></ul>
+        </div>
+    </div>
+
+    <!-- Axios via CDN exposes a global `axios` -->
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="script.js"></script>
+</body>
+
+</html>

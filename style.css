@@ -1,0 +1,42 @@
+*{
+  font-family: cursive;
+  margin: 5px;
+  padding: 2px;
+}
+body {
+  background: #772a9b;
+  background: radial-gradient(
+    circle,
+    rgba(119, 42, 155, 1) 0%,
+    rgba(87, 199, 93, 1) 51%,
+    rgba(239, 60, 255, 0.32) 100%
+  );
+}
+.container {
+  display: flexbox;
+  justify-content: center;
+  background: rgba(216, 216, 216, 0.439);
+  border: 3px solid whitesmoke;
+  border-radius: 5px;
+}
+.header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.h1{
+  color: black;
+  font-family: cursive;
+  background: whitesmoke;
+  padding: 5px;
+  border: 2px solid white;
+  border-radius: 10px;
+}
+
+.inputBox {
+  display: flexbox;
+  justify-content: center;
+  background: rgba(216, 216, 216, 0.439);
+  border: 3px solid whitesmoke;
+  border-radius: 5px;
+}
