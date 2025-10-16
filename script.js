@@ -1,4 +1,7 @@
-// No require() in the browser. Axios is available globally from the CDN as `axios`.
+const globalLink =
+  "https://crudcrud.com/api/e391b7bd88b7441b972a63bcad6f58c3/passwordkeeper";
+
+let currentEditId = null;
 
 function handleFormSubmit(event) {
   event.preventDefault(); // stop default page reload
@@ -9,25 +12,36 @@ function handleFormSubmit(event) {
     password: form.password.value,
   };
 
-  axios
-    .post(
-      "https://crudcrud.com/api/1f48ca11f48946928d71608ec32f1712/passwordkeeper",
-      userDetails
-    )
-    .then((res) => {
-      console.log(res.data);
-      display(res.data);
-    })
-    .catch((error) => {
-      console.error(error);
-    });
+  async function fucntioncall() {
+    try {
+      if (currentEditId !== null) {
+        await axios.put(`${globalLink}/${currentEditId}`, userDetails);
+        const existingList = document.querySelector(
+          `li[data-id="${currentEditId}"]`
+        );
+        if (existingList) {
+          const span = existingList.querySelector("span");
+          span.textContent = `${userDetails.title} - ${userDetails.password}`;
+        }
+        currentEditId = null;
+      } else {
+        const res = await axios.post(globalLink, userDetails);
+        display(res.data);
+        console.log(res.data);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  fucntioncall();
+  event.target.reset();
 }
 
 function display(userData) {
   const ul = document.querySelector("ul");
   const li = document.createElement("li");
 
-  // Set recived id as users lists id.
   if (userData._id) {
     li.dataset.id = userData._id;
   }
@@ -58,38 +72,12 @@ function display(userData) {
     const id = el.dataset.id;
 
     axios
-      .delete(
-        `https://crudcrud.com/api/1f48ca11f48946928d71608ec32f1712/passwordkeeper/${id}`
-      )
+      .delete(`${globalLink}/${id}`)
       .then(() => {
         ul.removeChild(el);
       })
       .catch((error) => console.log(error));
   });
-  //   editBtn.addEventListener("click", function (event) {
-  //     const el = event.target.parentElement;
-  //     const id = el.dataset.id;
-
-  //     // Here update the data from the user inputs.
-  //     document.getElementById("title").value = userData.title;
-  //     document.getElementById("password").value = userData.password;
-
-  //     const updateDetails = {
-  //       uodatedTitle: userData.title,
-  //       uodatedPassword: userData.password,
-  //     };
-  //     if (id) {
-  //       axios
-  //         .put(
-  //           `https://crudcrud.com/api/1f48ca11f48946928d71608ec32f1712/passwordkeeper/${id}`,
-  //           { updateDetails }
-  //         )
-  //         .then((res) => {
-  //           res.data;
-  //         })
-  //         .catch((error) => console.log(error));
-  //     }
-  //   });
 
   editBtn.addEventListener("click", async function (event) {
     const el = event.target.parentElement;
@@ -99,32 +87,13 @@ function display(userData) {
     document.getElementById("title").value = userData.title;
     document.getElementById("password").value = userData.password;
 
-    // Read the updated values directly from inputs
-    const newTitle = document.getElementById("title").value;
-    const newPassword = document.getElementById("password").value;
-
     if (!id) return;
-
-    try {
-      // PUT must include the replacement object as the 2nd arg
-      await axios.put(
-        `https://crudcrud.com/api/1f48ca11f48946928d71608ec32f1712/passwordkeeper/${id}`,
-        { title: newTitle, password: newPassword }
-      ); // axios.put(url, data) sends body; CrudCrud replaces the resource with these fields [web:179][web:143]
-
-      // Update the existing list item text
-      el.querySelector("span").textContent = `${newTitle} - ${newPassword}`;
-    } catch (error) {
-      console.log(error);
-    }
+    currentEditId = id;
   });
 }
-
 window.addEventListener("DOMContentLoaded", () => {
   axios
-    .get(
-      `https://crudcrud.com/api/1f48ca11f48946928d71608ec32f1712/passwordkeeper/`
-    )
+    .get(globalLink)
     .then((res) => {
       for (let i = 0; i < res.data.length; i++) {
         display(res.data[i]);
